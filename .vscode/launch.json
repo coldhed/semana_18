@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": true,
+      "externalConsole": false,
+      "cwd": "/Users/santiago/Documents/escuela/3er SEM/Semana 18",
+      "program": "/Users/santiago/Documents/escuela/3er SEM/Semana 18/build/Debug/outDebug",
+      "MIMode": "gdb"
+    }
+  ]
+}
