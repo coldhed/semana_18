@@ -57,6 +57,10 @@ int main()
                 // 7. Ir a propetario
                 case 7:
                 break;
+                
+                case 8:
+                    return choice;
+                    break;
             }
             }while(choice2!=7);
     // Dueño
