@@ -11,7 +11,6 @@ int choice,choice2,choice3;
 
 int main()
 {
-    system("color f8");
     Ordenes ordenes;
     Restaurante restaurante;
     // AQUI VA EL CICLO
@@ -34,21 +33,27 @@ int main()
                         // restaurante.imprimirMenu();
                         // los couts es para ver si sirven los case #
                         cout << "restaurante.imprimirMenu()";
+                        break;
                 // 2. Recoger aqui
                 case 2:
                         cout << "funcion pasar el dato de tipo de entrega";
+                        break;
                 // 3. Servicio a domicilio
                 case 3:
                         cout <<"funcion pasar el dato de tipo de entrega";
+                        break;
                 // 4. Orden
                 case 4:
                         cout << "Orden* nuevaOrden = new Orden()";
+                        break;
                 // 5. Agregar orden a ordenes
                 case 5:
                         cout << "ordenes.agregarOrden(&Orden)";
+                        break;
                 // 6. Confirmar Pedido
                 case 6:
                         cout << "Dar tiempo estimado";
+                        break;
                 // 7. Ir a propetario
                 case 7:
                 break;
@@ -64,9 +69,11 @@ int main()
                 // Ver estado de ordenes
                 case 1:
                         cout << "ordenes.imprimirOrdenes()";
+                        break;
                 // Completar Orden
                 case 2:
                         cout << "ordenes.completarOrden()";
+                        break;
                 // Regresar Menu Principal
                 case 3:
                 break;
