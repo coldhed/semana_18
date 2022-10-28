@@ -67,12 +67,12 @@ class Ordenes {
     }
 
     void imprimirOrdenes() {
-        cout << "Ordenes en el órden en el que entraron:\n";
+        cout << "\nOrdenes en el órden en el que entraron:\n\n";
 
         struct qNode* tmp = head;
         while (tmp != nullptr) {
             tmp->value->imprimirOrden();
-            cout << endl;
+            cout << "--------------------------------------------------------------------\n\n";
             tmp = tmp->next;
         }
 

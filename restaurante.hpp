@@ -1,5 +1,10 @@
 #include <iostream>
+#include <vector>
 #include <string>
+#include <algorithm>
+#include <iomanip>
+
+using namespace std;
 
 class Alimentos{
     protected:
@@ -25,7 +30,7 @@ class Alimentos{
             return nombre;
         }
         
-        virtual std::string imprimirAlimento() = 0;
+        virtual void imprimirAlimento() = 0;
 };
 
 class Alitas : public Alimentos {
@@ -44,8 +49,8 @@ class Alitas : public Alimentos {
         {
             return salsa;
         }
-        std::string imprimirAlimento(){
-            return "Alimento: " + getNombre() + "\n Precio: " + getPrecio() + "\n Salsa: " + getSalsa() + "\n";
+        void imprimirAlimento(){
+            cout << setprecision(2) << fixed << "Alimento: " << getNombre() << "\n Precio: " << getPrecio() << "\n Salsa: " << getSalsa() << "\n";
         }
 };
 
@@ -53,8 +58,8 @@ class PapasFrancesa : public Alimentos {
     public:
         PapasFrancesa(){}
         PapasFrancesa(double precioX, std::string nombreX) : Alimentos(precioX, nombreX){}
-        std::string imprimirAlimento(){
-            return "Alimento: " + getNombre() + "\n Precio: " + getPrecio() + "\n Salsa: " + "\n";
+        void imprimirAlimento(){
+            cout << setprecision(2) << fixed << "Alimento: " << getNombre() << "\n Precio: " << getPrecio() << "\n";
         }
 };
 
@@ -62,8 +67,8 @@ class Banderillas : public Alimentos {
     public: 
         Banderillas(){}
         Banderillas(double precioX, std::string nombreX) : Alimentos(precioX, nombreX){}
-        std::string imprimirAlimento(){
-            return "Alimento: " + getNombre() + "\n Precio: " + getPrecio() + "\n Salsa: " + "\n";
+        void imprimirAlimento(){
+            cout << setprecision(2) << fixed << "Alimento: " << getNombre() << "\n Precio: " << getPrecio() << "\n";
         }
 };
 
@@ -87,96 +92,47 @@ class Cliente
         void agregarProductoComprado(string nombreProducto);
 };
 
-
-Cliente::Cliente(std::string nombreCompletoP, int idClienteP)
-{
-    nombreCompleto = nombreCompletoP;
-    idCliente = idClienteP;
-    maxSizeLista = 5;               
-    contProductosComprados = 0;    
-    listaNombresProductosComprados = new std::string[maxSizeLista]; 
-}
-
-void Cliente::agregarProductoComprado(string nombreProducto)
-{
-    listaNombresProductosComprados[contProductosComprados] = nombreProducto;
-    contProductosComprados++;
-}
-
-void Cliente::incrementarTotalGastado(double cantidadGastada)
-{
-    totalGastado +=cantidadGastada;
-}
-
-std::string Cliente::getNombreCompleto()
-{
-    return nombreCompleto;
-}
-
-double Cliente::getTotalGastado()
-{
-    return totalGastado;
-}
-
-int Cliente::getIdCliente()
-{
-    return idCliente;
-}
-
-
 class Restaurante {
     private: 
-        int minStock;
         int contadorAlitasEnStock;
         int contadorPapasFrancesaEnStock;
         int contadorBanderillasEnStock;
+
+
+        string direccion;
     
-        Alitas** listaAlitas;
-        PapasFrancesa** listaPapas;
-        Banderillas** listaBanderillas;
-        Cliente** listaClientes;
+        Alitas instanciaAlitas;
+        PapasFrancesa instanciaPapas;
+        Banderillas instanciaBanderillas;
+
+        vector<string> cpEntregas;
     
     public:
-        Restaurante(int minStockP){
-            minStock = minStockP;
-            contadorAlitasEnStock = 0;
-            contadorPapasFrancesaEnStock = 0;
-            contadorBanderillasEnStock = 0;
-            
-            listaAlitas = new Alitas*[minStock];
-            listaPapas = new PapasFrancesa*[minStock];
-            listaBanderillas = new Banderillas*[minStock];
-            
-            maxSizeListaClientes = 5;       
-            contClientesAgregados = 0;      
-            listaClientes = new Cliente*[maxSizeListaClientes]; 
+        Restaurante(int stockAlimentos, string direccion_){
+            contadorAlitasEnStock = stockAlimentos;
+            contadorPapasFrancesaEnStock = stockAlimentos;
+            contadorBanderillasEnStock = stockAlimentos;
+
+            direccion = direccion_;
+   
+
+            instanciaAlitas = Alitas("BBQ", 75.00, "Alitas Mario");
+            instanciaPapas = PapasFrancesa(47.50, "Papas Felices");
+            instanciaBanderillas = Banderillas(68.00, "Banderillas Don Luigi");
+
+            cpEntregas = vector<string>{"02420", "02419", "02421"};
         }
     
         void imprimirMenu(){
-            listaAlitas[0] -> imprimirAlimento();
-            std::cout "Alitas - cantidad de ordenes disponibles: " << contadorAlitasEnStock << std::endl;
-            listaPapas[0] -> imprimirAlimento();
-            std::cout "Papas a la francesa - cantidad de ordenes disponibles: " << contadorPapasFrancesaEnStock << std::endl;
-            listaBanderillas[0] -> imprimirAlimento();
-            std::cout "Bnaderillas - cantidad de ordenes disponibles: " << contadorBanderillasEnStock << std::endl;
+            instanciaPapas.imprimirAlimento();
+            instanciaAlitas.imprimirAlimento();
+            instanciaBanderillas.imprimirAlimento();
         }
-    
-        void agregarPapas(PapasFrancesa* d){
-            listaPapas[contadorPapasFrancesaEnStock] = d;
-            contadorPapasFrancesaEnStock++;
+
+        void imprimirDireccion() {
+            cout << "Direccion: " << direccion << endl;
         }
-        void agregarAlitas(Alitas* d){
-            listaAlitas[contadorAlitasEnStock] = d;
-            contadorAlitasEnStock++;
-        }
-        void agregarBanderillas(Banderillas *d){
-            listaBanderillas[contadorBanderillasEnStock] = d;
-            contadorBanderillasEnStock++;
-        }
-        
-        int getMinStock(){
-            return minStock;
-        }
+
         int getContadorPapasEnStock(){
             return contadorPapasFrancesaEnStock;
         }
@@ -186,19 +142,21 @@ class Restaurante {
         int getContadorBanderillasEnStock(){
             return contadorBanderillasEnStock;
         }
-        
-        // regresa 1 si se puede llevar a ese código postal, 0 si no
-        int sePuedeLlevar(Cliente* cliente) {
-            if (cliente -> getIdCliente() == 02420 || cliente -> getIdCliente() == 02419){
-                listaClientes[contClientesAgregados]=cliente;
-                contClientesAgregados++;
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
+
+        void setStockPapas(int stock) {
+            contadorPapasFrancesaEnStock = stock;
+        }
+
+        void setStockAlitas(int stock) {
+            contadorAlitasEnStock = stock;
+        }
+
+        void setStockBanderillas(int stock) {
+            contadorBanderillasEnStock = stock;
         }
         
-
+        // regresa 1 si se puede llevar a ese código postal, 0 si no
+        int sePuedeLlevar(string codigoPostal) {
+            return (find(cpEntregas.begin(), cpEntregas.end(), codigoPostal) != cpEntregas.end());
+        }
 };

@@ -3,116 +3,199 @@
 #include "ordenes.hpp"
 #include <string>
 #include <stdio.h>
-#include <conio.h>
 
 using namespace std;
 
-int choice,choice2,choice3;
+char choice,choice2,choice3, continuar, menuChoice;
+
+Ordenes ordenes;
+Restaurante restaurante(5, "Banderillas Don Luigi, Azcapotzalco 21");
+
+void metodoCliente();
+void actualizarInventario();
+void revisarInventario();
 
 int main()
 {
-    Ordenes ordenes;
-    Restaurante restaurante;
     // AQUI VA EL CICLO
-    do{
-    system("cls");
-    cout << "Introduzca el numero de su seleccion:\n1. Cliente\n2. Propetario\n3. Salir" << endl;
-    cin >> choice;
-    
-    switch (choice)
-    {
-    //1. Cliente
-    case 1:
-            do{
-            cout << "\nCliente\n1. Ver el menu\n2. Recoger aqui\n3. Servicio a domicilio\n4. Ordenar\n5. Agregar a orden\n6. Confirmar Pedido\n7. Ir a Propetario\n";
-            cin >> choice2;
-            switch (choice2)
-            {
-                // 1. Ver el menu
-                case 1:
-                        // restaurante.imprimirMenu();
-                        // los couts es para ver si sirven los case #
-                        cout << "restaurante.imprimirMenu()";
-                        break;
-                // 2. Recoger aqui
-                case 2:
-                        cout << "funcion pasar el dato de tipo de entrega";
-                        break;
-                // 3. Servicio a domicilio
-                case 3:
-                        cout <<"funcion pasar el dato de tipo de entrega";
-                        break;
-                // 4. Orden
-                case 4:
-                        cout << "Orden* nuevaOrden = new Orden()";
-                        break;
-                // 5. Agregar orden a ordenes
-                case 5:
-                        cout << "ordenes.agregarOrden(&Orden)";
-                        break;
-                // 6. Confirmar Pedido
-                case 6:
-                        cout << "Dar tiempo estimado";
-                        break;
-                // 7. Ir a propetario
-                case 7:
-                break;
-            }
-            }while(choice2!=7);
-    // Dueño
-    case 2:
-            do{
-            cout << "\nPropietario\n1. Ver estado de ordenes\n2. Completar Orden\n3. Regresar a Menu Principal\n";            
+    do {
+        cout << "Introduzca el numero de su seleccion:\n1. Cliente\n2. Propetario\n3. Salir\n\nOpcion: ";
+        cin >> choice;
+
+        #if defined(_WIN32)
+            system("cls");
+        #elif __APPLE__
+            system("clear");
+        #endif
+        
+        switch (choice)
+        {
+        //1. Cliente
+        case ('1'):
+        {
+            metodoCliente();
+            break;
+        }
+        // Dueño
+        case '2':
+            cout << "\nPropietario\n1. Ver estado de ordenes\n2. Completar Orden\n3. Actualizar inventario\n4. Ver inventario\n5. Regresar a Menu Principal\n\nOpcion: ";            
             cin >> choice3;
             switch (choice3)
             {
                 // Ver estado de ordenes
-                case 1:
-                        cout << "ordenes.imprimirOrdenes()";
-                        break;
+                case '1':
+                    ordenes.imprimirOrdenes();
+                    break;
+
                 // Completar Orden
-                case 2:
-                        cout << "ordenes.completarOrden()";
-                        break;
-                // Regresar Menu Principal
-                case 3:
-                break;
+                case '2':
+                    ordenes.completarOrden();
+                    cout << "Ordenes despues de completar la primera orden:\n\n";
+                    ordenes.imprimirOrdenes();
+                    break;
+
+                case '3':
+                    actualizarInventario();
+                    break;
+                
+                case '4':
+                    revisarInventario();
+                    break;
             }
-            }while(choice3!=3);
-    // Ordenar
-    case 3:
-    break;
-    default:
-        cout << "Ha ingresado una opción incorrecta";
+            break;
+        // Ordenar
+        case '3':
+            break;
+        default:
+            cout << "Ha ingresado una opción incorrecta\n\n";
+        }
+    } while(choice != '3');
+
+    ordenes.liberarMemoria();
+}
+
+void metodoCliente() {
+    // para recoger o a domicilio?
+    char metEnt;
+    string codigoPostal = "";
+    string direccion = "";
+    cout << "La orden seria para recoger (r) o a domicilio (d)? ";
+    cin >> metEnt;
+
+    // si es a domicilio, revisar si se entrega a ese C.P.
+    if (metEnt == 'd') {
+        cout << "¿Cual es tu codigo postal? ";
+        cin >> codigoPostal;
+        if (!restaurante.sePuedeLlevar(codigoPostal)) {
+            cout << "No hacemos entregas a ese domicilio...\n"
+                    << "¿Quieres hacer una orden para recoger?\n"
+                    << "(s/n): ";
+            cin >> continuar;
+
+            if (continuar == 'n') return;
+        }
+
+        cout << "¿Cual es tu direccion? ";
+        cin.ignore();
+        getline(std::cin, direccion);
     }
-    }while(choice!=3);
 
-    /*
+    string nombre;
+    cout << "Ingrese su nombre: ";
+    cin.ignore();
+    getline(std::cin, nombre);
 
-    1. Preguntar si es cliente o dueño
+    // hacer la orden
+    unordered_map<string, int> itemsPedido = {
+        {"Papas", 0},
+        {"Alitas", 0},
+        {"Banderillas", 0},
+    };
 
-    Cliente:
-    1. Ver el menú.
-        restaurante.imprimirMenu();
-    2. Para recoger o domicilio?
-    3. Dirección y código postal.
-        3.1 Si es a domicilio, revisar el código postal. Restaurante va a tener una funcion para eso
+    int cantidad, total = 0;
 
-        3.2 Si no se entrega, ofrecer que sea la orden para recoger
-    4. Orden.
-        Orden* nuevaOrden = new Orden()
-    5. Confirmar pedido -> Dar tiempo estimado
-    6. Agregar orden a ordenes
-        ordenes.agregarOrden(&orden);
+    cout << "Menu:\n";
+    restaurante.imprimirMenu();
+    cout << endl;
 
-    Dueño:
-    1. Ver estado de ordenes o completar órden:
-        Ver ordenes:
-            ordenes.imprimirOrdenes();
-        Completar órden:
-            ordenes.completarOrden();
+    int stock;
 
-    */
+    stock = restaurante.getContadorPapasEnStock();
+    do {
+        cout << "¿Cuantas papas quieres? Máximo: " << stock << endl;
+        cin >> cantidad;
+        itemsPedido["Papas"] = cantidad;
+    } while (stock < cantidad);
+    total += cantidad;
 
-    //ordenes.liberarMemoria();
+    stock = restaurante.getContadorAlitasEnStock();
+    do {
+        cout << "¿Cuantas alitas quieres? Máximo: " << stock << endl;
+        cin >> cantidad;
+        itemsPedido["Alitas"] = cantidad;
+    } while (stock < cantidad);
+    total += cantidad;
+
+    stock = restaurante.getContadorBanderillasEnStock();
+    do {
+        cout << "¿Cuantas banderillas quieres? Máximo: " << stock << endl;
+        cin >> cantidad;
+        itemsPedido["Banderillas"] = cantidad;
+    } while (stock < cantidad);
+    total += cantidad;
+
+    if (total == 0) {
+        cout << "Tu orden no puede estar vacia...\n";
+        return;
+    }
+
+    cout << endl << "Confirmar orden...\n";
+    cout << "Papas: " << itemsPedido["Papas"] << endl;
+    cout << "Alitas: " << itemsPedido["Alitas"] << endl;
+    cout << "Banderillas: " << itemsPedido["Banderillas"] << endl;
+
+    cout << "Confirmar (s/n): ";
+    cin >> continuar;
+
+    if (continuar == 'n') {
+        cout << "Orden cancelada\n";
+        return;
+    }
+
+    string metodoDeEntrega = (metEnt == 'd') ? "domicilio" : "recoger";
+    Orden* newOrden = new Orden(direccion, codigoPostal, nombre, itemsPedido, metodoDeEntrega);
+    ordenes.agregarOrden(newOrden);
+
+    restaurante.setStockAlitas(restaurante.getContadorAlitasEnStock() - itemsPedido["Alitas"]);
+    restaurante.setStockPapas(restaurante.getContadorPapasEnStock() - itemsPedido["Papas"]);
+    restaurante.setStockBanderillas(restaurante.getContadorBanderillasEnStock() - itemsPedido["Banderillas"]);
+
+    cout << "Orden Confirmada!\n" << "Gracias por su compra\n\n\n";
+}
+
+void actualizarInventario() {
+    cout << endl << endl << "Actualizar el inventario:\n";
+    
+    int stock;
+
+    cout << "¿Cuantas papas hay en inventario? ";
+    cin >> stock;
+    restaurante.setStockPapas(stock);
+    cout << endl;
+
+    cout << "¿Cuantas alitas hay en inventario? ";
+    cin >> stock;
+    restaurante.setStockAlitas(stock);
+    cout << endl;
+
+    cout << "¿Cuantas banderillas hay en inventario? ";
+    cin >> stock;
+    restaurante.setStockBanderillas(stock);
+    cout << endl;
+}
+
+void revisarInventario() {
+    cout << "Papas en inventario: " << restaurante.getContadorPapasEnStock() << endl;
+    cout << "Alitas en inventario: " << restaurante.getContadorAlitasEnStock() << endl;
+    cout << "Banderillas en inventario: " << restaurante.getContadorBanderillasEnStock() << endl;
 }
