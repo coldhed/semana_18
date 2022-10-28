@@ -4,7 +4,7 @@
 using namespace std;
 
 class Orden {
-    // Clase con la info de la orden
+    // Clase con la info de la orden.
     private:
 
     string direccion;
